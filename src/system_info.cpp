@@ -4,6 +4,7 @@
 #include <thread>
 #include <chrono>
 #include <unistd.h>
+#include <sys/statvfs.h>
 
 namespace systeminfo
 {
@@ -141,4 +142,37 @@ namespace systeminfo
 
         return (1.0 - (static_cast<double>(idle_delta) / total_delta)) * 100.0;
     }
+double get_disk_usage_percent()
+{
+    std::ifstream disk_file("/proc/mounts");
+
+    if (!disk_file)
+    {
+        throw std::runtime_error("Failed to open /proc/mounts");
+    }
+
+    struct statvfs disk_info{};
+
+    if (statvfs("/", &disk_info) != 0)
+    {
+        throw std::runtime_error("Failed to read disk information");
+    }
+
+    const double total_bytes =
+        static_cast<double>(disk_info.f_blocks) * disk_info.f_frsize;
+
+    const double available_bytes =
+        static_cast<double>(disk_info.f_bavail) * disk_info.f_frsize;
+
+    if (total_bytes <= 0.0 || available_bytes < 0.0 ||
+        available_bytes > total_bytes)
+    {
+        throw std::runtime_error("Invalid disk information");
+    }
+
+    const double used_bytes = total_bytes - available_bytes;
+
+    return (used_bytes / total_bytes) * 100.0;
+}
+
 }

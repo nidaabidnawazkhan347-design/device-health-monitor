@@ -1,5 +1,4 @@
 #include "system_info.h"
-
 #include <iomanip>
 #include <iostream>
 
@@ -25,6 +24,10 @@ int main()
 
         std::cout << "CPU Usage:      "
                   << systeminfo::get_cpu_usage_percent()
+                  << "%\n";
+
+        std::cout << "Disk Usage:     "
+                  << systeminfo::get_disk_usage_percent()
                   << "%\n";
 
 

@@ -33,3 +33,12 @@ else
     echo "[FAIL] CPU usage is outside valid range"
     exit 1
 fi
+
+disk=$(echo "$output" | grep "Disk Usage" | awk '{print $3}' | tr -d '%')
+
+if awk "BEGIN {exit !($disk >= 0 && $disk <= 100)}"; then
+    echo "[PASS] Disk usage is within valid range"
+else
+    echo "[FAIL] Disk usage is outside valid range"
+    exit 1
+fi

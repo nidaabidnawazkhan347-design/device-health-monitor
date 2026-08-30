@@ -34,3 +34,10 @@ TEST(SystemInfoTest, CpuUsageIsWithinValidRange)
 }
 
 
+TEST(SystemInfoTest, DiskUsageIsWithinValidRange)
+{
+    double disk = systeminfo::get_disk_usage_percent();
+
+    EXPECT_GE(disk, 0.0);
+    EXPECT_LE(disk, 100.0);
+}
