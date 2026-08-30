@@ -23,6 +23,12 @@ int main()
                   << systeminfo::get_memory_usage_percent()
                   << "%\n";
 
+        std::cout << "CPU Usage:      "
+                  << systeminfo::get_cpu_usage_percent()
+                  << "%\n";
+
+
+
         return 0;
     }
     catch (const std::exception& error)

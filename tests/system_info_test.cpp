@@ -24,3 +24,13 @@ TEST(SystemInfoTest, MemoryUsageIsWithinValidRange)
     EXPECT_GE(memory_usage, 0.0);
     EXPECT_LE(memory_usage, 100.0);
 }
+
+TEST(SystemInfoTest, CpuUsageIsWithinValidRange)
+{
+    double cpu = systeminfo::get_cpu_usage_percent();
+
+    EXPECT_GE(cpu, 0.0);
+    EXPECT_LE(cpu, 100.0);
+}
+
+

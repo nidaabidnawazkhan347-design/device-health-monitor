@@ -8,6 +8,7 @@ namespace systeminfo
     std::string get_hostname();
     std::string get_uptime();
     double get_memory_usage_percent();
+    double get_cpu_usage_percent();
 }
 
 #endif

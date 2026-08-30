@@ -24,3 +24,12 @@ else
     echo "[FAIL] Memory usage is outside valid range"
     exit 1
 fi
+
+cpu=$(echo "$output" | grep "CPU Usage" | awk '{print $3}' | tr -d '%')
+
+if awk "BEGIN {exit !($cpu >= 0 && $cpu <= 100)}"; then
+    echo "[PASS] CPU usage is within valid range"
+else
+    echo "[FAIL] CPU usage is outside valid range"
+    exit 1
+fi

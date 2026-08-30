@@ -1,8 +1,8 @@
-#include "system_info.h"
-
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <thread>
+#include <chrono>
 #include <unistd.h>
 
 namespace systeminfo
@@ -85,6 +85,60 @@ namespace systeminfo
 
         const double used_kb = total_kb - available_kb;
 
-        return (used_kb / total_kb) * 100.0;
+            return (used_kb / total_kb) * 100.0;
+    }
+
+    double get_cpu_usage_percent()
+    {
+        std::ifstream stat_file("/proc/stat");
+
+        if (!stat_file)
+        {
+            throw std::runtime_error("Failed to open /proc/stat");
+        }
+
+        std::string cpu;
+        long long user;
+        long long nice;
+        long long system;
+        long long idle;
+        long long iowait;
+        long long irq;
+        long long softirq;
+        long long steal;
+
+        stat_file >> cpu >> user >> nice >> system >> idle
+                  >> iowait >> irq >> softirq >> steal;
+
+        const long long idle_time = idle + iowait;
+        const long long total_time =
+            user + nice + system + idle + iowait + irq + softirq + steal;
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+        stat_file.close();
+        stat_file.open("/proc/stat");
+
+        if (!stat_file)
+        {
+            throw std::runtime_error("Failed to reopen /proc/stat");
+        }
+
+        stat_file >> cpu >> user >> nice >> system >> idle
+                  >> iowait >> irq >> softirq >> steal;
+
+        const long long new_idle_time = idle + iowait;
+        const long long new_total_time =
+            user + nice + system + idle + iowait + irq + softirq + steal;
+
+        const long long total_delta = new_total_time - total_time;
+        const long long idle_delta = new_idle_time - idle_time;
+
+        if (total_delta <= 0)
+        {
+            throw std::runtime_error("Invalid CPU statistics");
+        }
+
+        return (1.0 - (static_cast<double>(idle_delta) / total_delta)) * 100.0;
     }
 }
