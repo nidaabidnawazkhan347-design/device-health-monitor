@@ -1,4 +1,5 @@
 # Device Health Monitor
+[![Device Health Monitor CI](https://github.com/nidaabidnawazkhan347-design/device-health-monitor/actions/workflows/ci.yml/badge.svg)](https://github.com/nidaabidnawazkhan347-design/device-health-monitor/actions/workflows/ci.yml)
 
 A Linux-based C++ application that monitors basic system health information such as hostname, uptime, memory usage, CPU usage, and disk usage.
 
