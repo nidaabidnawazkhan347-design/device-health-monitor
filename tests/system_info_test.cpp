@@ -3,6 +3,7 @@
 #include "device_info.h"
 #include <gtest/gtest.h>
 #include <stdexcept>
+#include <cstdlib>
 
 TEST(SystemInfoTest, HostnameIsNotEmpty)
 {
@@ -135,3 +136,45 @@ TEST(DeviceInfoTest, SimulatedDeviceDataHasExpectedValues)
     EXPECT_DOUBLE_EQ(data.cpu_usage_percent, 30.0);
     EXPECT_DOUBLE_EQ(data.disk_usage_percent, 55.0);
 }
+
+
+TEST(DeviceInfoTest, ReadsValuesFromEnvironment)
+{
+    setenv("DEVICE_TEMPERATURE", "85.0", 1);
+    setenv("DEVICE_MEMORY", "82.0", 1);
+    setenv("DEVICE_CPU", "91.0", 1);
+    setenv("DEVICE_DISK", "75.0", 1);
+
+    const auto data = deviceinfo::get_simulated_device_data();
+
+    EXPECT_DOUBLE_EQ(data.temperature_celsius, 85.0);
+    EXPECT_DOUBLE_EQ(data.memory_usage_percent, 82.0);
+    EXPECT_DOUBLE_EQ(data.cpu_usage_percent, 91.0);
+    EXPECT_DOUBLE_EQ(data.disk_usage_percent, 75.0);
+
+    unsetenv("DEVICE_TEMPERATURE");
+    unsetenv("DEVICE_MEMORY");
+    unsetenv("DEVICE_CPU");
+    unsetenv("DEVICE_DISK");
+}
+
+TEST(DeviceInfoTest, InvalidEnvironmentValuesUseDefaults)
+{
+    setenv("DEVICE_TEMPERATURE", "not-a-number", 1);
+    setenv("DEVICE_MEMORY", "invalid", 1);
+    setenv("DEVICE_CPU", "bad-value", 1);
+    setenv("DEVICE_DISK", "unknown", 1);
+
+    const auto data = deviceinfo::get_simulated_device_data();
+
+    EXPECT_DOUBLE_EQ(data.temperature_celsius, 65.0);
+    EXPECT_DOUBLE_EQ(data.memory_usage_percent, 45.0);
+    EXPECT_DOUBLE_EQ(data.cpu_usage_percent, 30.0);
+    EXPECT_DOUBLE_EQ(data.disk_usage_percent, 55.0);
+
+    unsetenv("DEVICE_TEMPERATURE");
+    unsetenv("DEVICE_MEMORY");
+    unsetenv("DEVICE_CPU");
+    unsetenv("DEVICE_DISK");
+}
+
