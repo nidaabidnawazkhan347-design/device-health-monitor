@@ -1,6 +1,8 @@
 #include "system_info.h"
+#include "health_status.h"
 
 #include <gtest/gtest.h>
+#include <stdexcept>
 
 TEST(SystemInfoTest, HostnameIsNotEmpty)
 {
@@ -40,4 +42,36 @@ TEST(SystemInfoTest, DiskUsageIsWithinValidRange)
 
     EXPECT_GE(disk, 0.0);
     EXPECT_LE(disk, 100.0);
+}
+
+TEST(HealthStatusTest, HealthyUsage)
+{
+    EXPECT_EQ(
+        healthstatus::evaluate_usage(50.0),
+        healthstatus::Status::Healthy
+    );
+}
+
+TEST(HealthStatusTest, WarningUsage)
+{
+    EXPECT_EQ(
+        healthstatus::evaluate_usage(80.0),
+        healthstatus::Status::Warning
+    );
+}
+
+TEST(HealthStatusTest, CriticalUsage)
+{
+    EXPECT_EQ(
+        healthstatus::evaluate_usage(90.0),
+        healthstatus::Status::Critical
+    );
+}
+
+TEST(HealthStatusTest, InvalidUsageThrows)
+{
+    EXPECT_THROW(
+        healthstatus::evaluate_usage(101.0),
+        std::invalid_argument
+    );
 }
