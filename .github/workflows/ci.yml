@@ -48,3 +48,42 @@ jobs:
       - name: Run Docker container
         run: |
           docker run --rm device-health-monitor
+
+      - name: Test Docker healthy scenario
+        run: |
+          output=$(docker run --rm \
+            -e DEVICE_TEMPERATURE=65 \
+            -e DEVICE_MEMORY=45 \
+            -e DEVICE_CPU=30 \
+            -e DEVICE_DISK=55 \
+            device-health-monitor)
+
+          echo "$output"
+
+          echo "$output" | grep -q "Overall Status: HEALTHY"
+
+      - name: Test Docker warning scenario
+        run: |
+          output=$(docker run --rm \
+            -e DEVICE_TEMPERATURE=75 \
+            -e DEVICE_MEMORY=82 \
+            -e DEVICE_CPU=70 \
+            -e DEVICE_DISK=60 \
+            device-health-monitor)
+
+          echo "$output"
+
+          echo "$output" | grep -q "Overall Status: WARNING"
+
+      - name: Test Docker critical scenario
+        run: |
+          output=$(docker run --rm \
+            -e DEVICE_TEMPERATURE=95 \
+            -e DEVICE_MEMORY=92 \
+            -e DEVICE_CPU=95 \
+            -e DEVICE_DISK=90 \
+            device-health-monitor)
+
+          echo "$output"
+
+          echo "$output" | grep -q "Overall Status: CRITICAL"
