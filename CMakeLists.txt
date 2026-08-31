@@ -11,6 +11,7 @@ add_executable(device-monitor
     src/main.cpp
     src/system_info.cpp
     src/health_status.cpp
+    src/device_info.cpp
 )
 
 target_include_directories(device-monitor
@@ -22,6 +23,7 @@ add_executable(system-info-tests
     tests/system_info_test.cpp
     src/system_info.cpp
     src/health_status.cpp
+    src/device_info.cpp
 )
 
 target_include_directories(system-info-tests
