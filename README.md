@@ -35,7 +35,7 @@ Overall Status: HEALTHY
 ## Requirements
 
 - Linux
-- C++ compiler with C++17 support
+- C++ compiler with C++20 support
 - CMake
 - GoogleTest
 - Bash
