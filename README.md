@@ -16,6 +16,22 @@ The project also includes automated GoogleTest tests, a Bash health-check script
 - Bash health-check script
 - GitHub Actions continuous integration
 
+## Example Output
+
+```text
+================================
+      Device Health Monitor
+================================
+
+Hostname:       DESKTOP-V0BBSC7
+Uptime:         7h 47m
+Memory Usage:   7.5% [HEALTHY]
+CPU Usage:      0.0% [HEALTHY]
+Disk Usage:     5.3% [HEALTHY]
+
+Overall Status: HEALTHY
+```
+
 ## Requirements
 
 - Linux
@@ -70,7 +86,28 @@ The project currently includes five GoogleTest tests covering:
 
 A successful test run should report:
 
-    100% tests passed, 0 tests failed out of 5
+    100% tests passed, 0 tests failed out of 9
+
+## Project Structure
+
+```text
+device-health-monitor/
+├── src/
+│   ├── main.cpp
+│   ├── system_info.cpp
+│   ├── system_info.h
+│   ├── health_status.cpp
+│   └── health_status.h
+├── tests/
+│   └── system_info_test.cpp
+├── scripts/
+│   └── health_check.sh
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+├── CMakeLists.txt
+└── README.md
+```
 
 ## Health Check Script
 
