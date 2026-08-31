@@ -100,3 +100,12 @@ TEST(HealthStatusTest, MaximumValidUsageIsCritical)
         healthstatus::Status::Critical
     );
 }
+
+
+TEST(HealthStatusTest, NegativeUsageThrows)
+{
+    EXPECT_THROW(
+        healthstatus::evaluate_usage(-1.0),
+        std::invalid_argument
+    );
+}
