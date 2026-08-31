@@ -1,6 +1,6 @@
 #include "system_info.h"
 #include "health_status.h"
-
+#include "device_info.h"
 #include <gtest/gtest.h>
 #include <stdexcept>
 
@@ -108,4 +108,30 @@ TEST(HealthStatusTest, NegativeUsageThrows)
         healthstatus::evaluate_usage(-1.0),
         std::invalid_argument
     );
+}
+TEST(DeviceInfoTest, SimulatedDeviceDataIsValid)
+{
+    const auto data = deviceinfo::get_simulated_device_data();
+
+    EXPECT_GE(data.temperature_celsius, -40.0);
+    EXPECT_LE(data.temperature_celsius, 125.0);
+
+    EXPECT_GE(data.memory_usage_percent, 0.0);
+    EXPECT_LE(data.memory_usage_percent, 100.0);
+
+    EXPECT_GE(data.cpu_usage_percent, 0.0);
+    EXPECT_LE(data.cpu_usage_percent, 100.0);
+
+    EXPECT_GE(data.disk_usage_percent, 0.0);
+    EXPECT_LE(data.disk_usage_percent, 100.0);
+}
+
+TEST(DeviceInfoTest, SimulatedDeviceDataHasExpectedValues)
+{
+    const auto data = deviceinfo::get_simulated_device_data();
+
+    EXPECT_DOUBLE_EQ(data.temperature_celsius, 65.0);
+    EXPECT_DOUBLE_EQ(data.memory_usage_percent, 45.0);
+    EXPECT_DOUBLE_EQ(data.cpu_usage_percent, 30.0);
+    EXPECT_DOUBLE_EQ(data.disk_usage_percent, 55.0);
 }
