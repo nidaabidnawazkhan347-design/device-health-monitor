@@ -75,3 +75,28 @@ TEST(HealthStatusTest, InvalidUsageThrows)
         std::invalid_argument
     );
 }
+
+
+TEST(HealthStatusTest, JustBelowWarningIsHealthy)
+{
+    EXPECT_EQ(
+        healthstatus::evaluate_usage(79.9),
+        healthstatus::Status::Healthy
+    );
+}
+
+TEST(HealthStatusTest, JustBelowCriticalIsWarning)
+{
+    EXPECT_EQ(
+        healthstatus::evaluate_usage(89.9),
+        healthstatus::Status::Warning
+    );
+}
+
+TEST(HealthStatusTest, MaximumValidUsageIsCritical)
+{
+    EXPECT_EQ(
+        healthstatus::evaluate_usage(100.0),
+        healthstatus::Status::Critical
+    );
+}
