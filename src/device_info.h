@@ -1,19 +1,17 @@
 #ifndef DEVICE_INFO_H
 #define DEVICE_INFO_H
 
+#include "device.h"
+
 #include <string>
 
 namespace deviceinfo
 {
-    struct DeviceData
+    class SimulatedDevice : public device::Device
     {
-        double temperature_celsius;
-        double memory_usage_percent;
-        double cpu_usage_percent;
-        double disk_usage_percent;
+    public:
+        DeviceData read_data() const override;
     };
-
-    DeviceData get_simulated_device_data();
 
     std::string device_data_to_string(const DeviceData& data);
 }

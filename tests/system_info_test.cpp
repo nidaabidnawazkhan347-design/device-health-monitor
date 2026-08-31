@@ -112,8 +112,8 @@ TEST(HealthStatusTest, NegativeUsageThrows)
 }
 TEST(DeviceInfoTest, SimulatedDeviceDataIsValid)
 {
-    const auto data = deviceinfo::get_simulated_device_data();
-
+const deviceinfo::SimulatedDevice device;
+const auto data = device.read_data();
     EXPECT_GE(data.temperature_celsius, -40.0);
     EXPECT_LE(data.temperature_celsius, 125.0);
 
@@ -129,8 +129,8 @@ TEST(DeviceInfoTest, SimulatedDeviceDataIsValid)
 
 TEST(DeviceInfoTest, SimulatedDeviceDataHasExpectedValues)
 {
-    const auto data = deviceinfo::get_simulated_device_data();
-
+const deviceinfo::SimulatedDevice device;
+const auto data = device.read_data();
     EXPECT_DOUBLE_EQ(data.temperature_celsius, 65.0);
     EXPECT_DOUBLE_EQ(data.memory_usage_percent, 45.0);
     EXPECT_DOUBLE_EQ(data.cpu_usage_percent, 30.0);
@@ -145,8 +145,8 @@ TEST(DeviceInfoTest, ReadsValuesFromEnvironment)
     setenv("DEVICE_CPU", "91.0", 1);
     setenv("DEVICE_DISK", "75.0", 1);
 
-    const auto data = deviceinfo::get_simulated_device_data();
-
+const deviceinfo::SimulatedDevice device;
+const auto data = device.read_data();
     EXPECT_DOUBLE_EQ(data.temperature_celsius, 85.0);
     EXPECT_DOUBLE_EQ(data.memory_usage_percent, 82.0);
     EXPECT_DOUBLE_EQ(data.cpu_usage_percent, 91.0);
@@ -165,7 +165,8 @@ TEST(DeviceInfoTest, InvalidEnvironmentValuesUseDefaults)
     setenv("DEVICE_CPU", "bad-value", 1);
     setenv("DEVICE_DISK", "unknown", 1);
 
-    const auto data = deviceinfo::get_simulated_device_data();
+const deviceinfo::SimulatedDevice device;
+const auto data = device.read_data();
 
     EXPECT_DOUBLE_EQ(data.temperature_celsius, 65.0);
     EXPECT_DOUBLE_EQ(data.memory_usage_percent, 45.0);

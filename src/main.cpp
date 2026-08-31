@@ -8,8 +8,9 @@ int main()
 {
     try
     {
-        const auto device_data = deviceinfo::get_simulated_device_data();
-        const auto hostname = systeminfo::get_hostname();
+const deviceinfo::SimulatedDevice device;
+const auto device_data = device.read_data();
+         const auto hostname = systeminfo::get_hostname();
         const auto uptime = systeminfo::get_uptime();
 const auto memory = device_data.memory_usage_percent;
 const auto cpu = device_data.cpu_usage_percent;
