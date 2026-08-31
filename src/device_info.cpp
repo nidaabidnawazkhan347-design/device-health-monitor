@@ -1,17 +1,41 @@
 #include "device_info.h"
 
+#include <cstdlib>
 #include <iomanip>
 #include <sstream>
+#include <string>
+
+namespace
+{
+    double read_environment_value(const char* name, double default_value)
+    {
+        const char* value = std::getenv(name);
+
+        if (value == nullptr)
+        {
+            return default_value;
+        }
+
+        try
+        {
+            return std::stod(value);
+        }
+        catch (...)
+        {
+            return default_value;
+        }
+    }
+}
 
 namespace deviceinfo
 {
     DeviceData get_simulated_device_data()
     {
         return {
-            65.0,
-            45.0,
-            30.0,
-            55.0
+            read_environment_value("DEVICE_TEMPERATURE", 65.0),
+            read_environment_value("DEVICE_MEMORY", 45.0),
+            read_environment_value("DEVICE_CPU", 30.0),
+            read_environment_value("DEVICE_DISK", 55.0)
         };
     }
 
@@ -28,4 +52,3 @@ namespace deviceinfo
         return output.str();
     }
 }
-
