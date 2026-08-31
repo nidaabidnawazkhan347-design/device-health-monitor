@@ -40,3 +40,11 @@ jobs:
         run: |
           chmod +x scripts/health_check.sh
           ./scripts/health_check.sh
+
+      - name: Build Docker image
+        run: |
+          docker build -t device-health-monitor .
+
+      - name: Run Docker container
+        run: |
+          docker run --rm device-health-monitor
