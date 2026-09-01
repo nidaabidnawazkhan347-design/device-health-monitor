@@ -1,6 +1,8 @@
+#include "device.h"
+#include "device_info.h"
 #include "health_status.h"
 #include "system_info.h"
-#include "device_info.h"
+
 #include <iomanip>
 #include <iostream>
 
@@ -8,13 +10,16 @@ int main()
 {
     try
     {
-const deviceinfo::SimulatedDevice device;
-const auto device_data = device.read_data();
-         const auto hostname = systeminfo::get_hostname();
+        const deviceinfo::SimulatedDevice simulated_device;
+        const device::Device& device = simulated_device;
+
+        const auto device_data = device.read_data();
+        const auto hostname = systeminfo::get_hostname();
         const auto uptime = systeminfo::get_uptime();
-const auto memory = device_data.memory_usage_percent;
-const auto cpu = device_data.cpu_usage_percent;
-const auto disk = device_data.disk_usage_percent;
+
+        const auto memory = device_data.memory_usage_percent;
+        const auto cpu = device_data.cpu_usage_percent;
+        const auto disk = device_data.disk_usage_percent;
 
         const auto memory_status = healthstatus::evaluate_usage(memory);
         const auto cpu_status = healthstatus::evaluate_usage(cpu);

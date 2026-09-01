@@ -29,15 +29,15 @@ namespace
 
 namespace deviceinfo
 {
-    DeviceData get_simulated_device_data()
-    {
-        return {
-            read_environment_value("DEVICE_TEMPERATURE", 65.0),
-            read_environment_value("DEVICE_MEMORY", 45.0),
-            read_environment_value("DEVICE_CPU", 30.0),
-            read_environment_value("DEVICE_DISK", 55.0)
-        };
-    }
+    DeviceData SimulatedDevice::read_data() const
+{
+    return {
+        read_environment_value("DEVICE_TEMPERATURE", 65.0),
+        read_environment_value("DEVICE_MEMORY", 45.0),
+        read_environment_value("DEVICE_CPU", 30.0),
+        read_environment_value("DEVICE_DISK", 55.0)
+    };
+}
 
     std::string device_data_to_string(const DeviceData& data)
     {
